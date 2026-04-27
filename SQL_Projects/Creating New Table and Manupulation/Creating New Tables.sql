@@ -1,0 +1,72 @@
+create TABLE dept (
+  deptno NUMBER(2)      CONSTRAINT pk_dept PRIMARY KEY,
+  dname  VARCHAR2(14)   NOT NULL,
+  loc    VARCHAR2(13)   NOT NULL
+);
+
+INSERT INTO dept (deptno, dname, loc) VALUES (10, 'ACCOUNTING', 'NEW YORK');
+INSERT INTO dept (deptno, dname, loc) VALUES (20, 'RESEARCH',   'DALLAS');
+INSERT INTO dept (deptno, dname, loc) VALUES (30, 'SALES',      'CHICAGO');
+INSERT INTO dept (deptno, dname, loc) VALUES (40, 'OPERATIONS', 'BOSTON');
+
+COMMIT;
+
+
+CREATE TABLE emp (
+  empno    NUMBER(4)      CONSTRAINT pk_emp PRIMARY KEY,
+  ename    VARCHAR2(10)   NOT NULL,
+  job      VARCHAR2(9)    NOT NULL,
+  mgr      NUMBER(4)      NULL,
+  hiredate DATE           NOT NULL,
+  sal      NUMBER(7,2)    NOT NULL,
+  comm     NUMBER(7,2)    NULL,
+  deptno   NUMBER(2)      NOT NULL,
+
+  CONSTRAINT fk_emp_dept FOREIGN KEY (deptno) REFERENCES dept(deptno),
+  CONSTRAINT fk_emp_mgr  FOREIGN KEY (mgr)    REFERENCES emp(empno)
+);
+
+-- Top manager
+INSERT INTO emp (empno, ename, job, mgr, hiredate, sal, comm, deptno)
+VALUES (7839, 'KING', 'PRESIDENT', NULL, TO_DATE('17-11-1981','DD-MM-YYYY'), 5000, NULL, 10);
+
+-- Managers
+INSERT INTO emp VALUES (7566, 'JONES', 'MANAGER', 7839, TO_DATE('02-04-1981','DD-MM-YYYY'), 2975, NULL, 20);
+INSERT INTO emp VALUES (7698, 'BLAKE', 'MANAGER', 7839, TO_DATE('01-05-1981','DD-MM-YYYY'), 2850, NULL, 30);
+INSERT INTO emp VALUES (7782, 'CLARK', 'MANAGER', 7839, TO_DATE('09-06-1981','DD-MM-YYYY'), 2450, NULL, 10);
+
+-- Analysts / Clerks under managers
+INSERT INTO emp VALUES (7788, 'SCOTT', 'ANALYST', 7566, TO_DATE('09-12-1982','DD-MM-YYYY'), 3000, NULL, 20);
+INSERT INTO emp VALUES (7902, 'FORD',  'ANALYST', 7566, TO_DATE('03-12-1981','DD-MM-YYYY'), 3000, NULL, 20);
+
+INSERT INTO emp VALUES (7369, 'SMITH', 'CLERK',  7902, TO_DATE('17-12-1980','DD-MM-YYYY'),  800, NULL, 20);
+INSERT INTO emp VALUES (7876, 'ADAMS', 'CLERK',  7788, TO_DATE('12-01-1983','DD-MM-YYYY'), 1100, NULL, 20);
+
+INSERT INTO emp VALUES (7900, 'JAMES',  'CLERK',  7698, TO_DATE('03-12-1981','DD-MM-YYYY'),  950, NULL, 30);
+INSERT INTO emp VALUES (7934, 'MILLER', 'CLERK',  7782, TO_DATE('23-01-1982','DD-MM-YYYY'), 1300, NULL, 10);
+
+-- Salesmen (dept 30) with commissions
+INSERT INTO emp VALUES (7499, 'ALLEN',  'SALESMAN', 7698, TO_DATE('20-02-1981','DD-MM-YYYY'), 1600,  300, 30);
+INSERT INTO emp VALUES (7521, 'WARD',   'SALESMAN', 7698, TO_DATE('22-02-1981','DD-MM-YYYY'), 1250,  500, 30);
+INSERT INTO emp VALUES (7654, 'MARTIN', 'SALESMAN', 7698, TO_DATE('28-09-1981','DD-MM-YYYY'), 1250, 1400, 30);
+INSERT INTO emp VALUES (7844, 'TURNER', 'SALESMAN', 7698, TO_DATE('08-09-1981','DD-MM-YYYY'), 1500,    0, 30);
+
+COMMIT;
+
+CREATE TABLE salgrade (
+    grade NUMBER,
+    losal NUMBER,
+    hisal NUMBER
+);
+
+INSERT INTO salgrade VALUES (1,  700, 1200);
+INSERT INTO salgrade VALUES (2, 1201, 1400);
+INSERT INTO salgrade VALUES (3, 1401, 2000);
+INSERT INTO salgrade VALUES (4, 2001, 3000);
+INSERT INTO salgrade VALUES (5, 3001, 9999);
+
+COMMIT;
+
+SELECT * FROM emp;
+SELECT * FROM dept;
+SELECT * FROM salgrade;
